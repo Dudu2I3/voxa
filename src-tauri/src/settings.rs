@@ -1,4 +1,3 @@
-use crate::utils;
 use log::{debug, warn};
 use serde::de::{self, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -535,6 +534,9 @@ pub struct AppSettings {
     /// `overlay_position` (position `none` → style `None`).
     #[serde(default = "default_overlay_style")]
     pub overlay_style: OverlayStyle,
+    /// Voxa-only settings (see `crate::voxa`).
+    #[serde(default)]
+    pub voxa: crate::voxa::VoxaSettings,
 }
 
 fn default_model() -> String {
@@ -572,7 +574,7 @@ fn default_update_checks_enabled() -> bool {
 }
 
 fn default_show_whats_new_on_update() -> bool {
-    true
+    false
 }
 
 fn default_whats_new_last_seen_version() -> String {
@@ -641,7 +643,9 @@ fn default_auto_submit() -> bool {
 }
 
 fn default_history_limit() -> usize {
-    5
+    // Voxa: statistics live in their own store, so this only bounds the History
+    // screen and the saved audio.
+    crate::voxa::defaults::DEFAULT_HISTORY_LIMIT
 }
 
 fn default_recording_retention_period() -> RecordingRetentionPeriod {
@@ -979,12 +983,15 @@ pub fn get_default_settings() -> AppSettings {
         clamshell_microphone: None,
         selected_output_device: None,
         translate_to_english: false,
-        selected_language: "auto".to_string(),
+        // Voxa: the owner dictates in Russian.
+        selected_language: crate::voxa::defaults::DEFAULT_LANGUAGE.to_string(),
         overlay_position: default_overlay_position(),
         debug_mode: false,
         log_level: default_log_level(),
-        custom_words: Vec::new(),
-        model_unload_timeout: ModelUnloadTimeout::default(),
+        // Voxa: pre-filled with the owner's technical terms.
+        custom_words: crate::voxa::defaults::default_custom_words(),
+        // Voxa: free the model after 10 idle minutes (8 GB machine).
+        model_unload_timeout: ModelUnloadTimeout::Min10,
         word_correction_threshold: default_word_correction_threshold(),
         history_limit: default_history_limit(),
         recording_retention_period: default_recording_retention_period(),
@@ -1022,6 +1029,7 @@ pub fn get_default_settings() -> AppSettings {
         vad_backend: VadBackend::default(),
         long_form_chunking: default_long_form_chunking(),
         overlay_style: default_overlay_style(),
+        voxa: crate::voxa::VoxaSettings::default(),
     }
 }
 
@@ -1236,6 +1244,18 @@ fn apply_settings_migrations(
         updated = true;
     }
 
+    // One-time Voxa migration: the first Voxa build shipped with update checks
+    // off and persisted that default. In-app updates are on by default now
+    // (docs/DECISIONS.md, D-17), so flip the stored value once.
+    if settings_value
+        .get("voxa")
+        .is_some_and(|v| v.get("updates_default_applied").is_none())
+    {
+        settings.update_checks_enabled = true;
+        settings.voxa.updates_default_applied = true;
+        updated = true;
+    }
+
     // One-time overlay migration (only while the new key is absent): the retired
     // overlay_position `none` meant "hide the overlay" → OverlayStyle::None; any
     // other position had it visible → Live. The position enum no longer has a
@@ -1263,7 +1283,7 @@ fn apply_settings_migrations(
 pub fn update_checks_forced_disabled() -> bool {
     use std::sync::OnceLock;
     static IS_UPDATER_DISABLED: OnceLock<bool> = OnceLock::new();
-    *IS_UPDATER_DISABLED.get_or_init(|| utils::env_flag_enabled("HANDY_DISABLE_UPDATER"))
+    *IS_UPDATER_DISABLED.get_or_init(|| crate::utils::env_flag_enabled("HANDY_DISABLE_UPDATER"))
 }
 
 /// Effective updater state: the user's stored preference, overridden to `false`
@@ -1598,6 +1618,32 @@ mod tests {
     fn default_overlay_style_is_live_when_overlay_defaults_on() {
         let settings = get_default_settings();
         assert_eq!(settings.overlay_style, OverlayStyle::Live);
+    }
+
+    #[test]
+    fn voxa_migration_turns_update_checks_on_once() {
+        // Store written by the first Voxa build: checks off, no marker yet.
+        let mut settings = get_default_settings();
+        settings.update_checks_enabled = false;
+        let raw = serde_json::json!({
+            "selected_model": "",
+            "update_checks_enabled": false,
+            "voxa": { "initial_prompt": "x" }
+        });
+        assert!(apply_settings_migrations(&mut settings, &raw));
+        assert!(settings.update_checks_enabled);
+        assert!(settings.voxa.updates_default_applied);
+
+        // Marker present: the owner's later choice is respected.
+        let mut settings = get_default_settings();
+        settings.update_checks_enabled = false;
+        let raw = serde_json::json!({
+            "selected_model": "",
+            "update_checks_enabled": false,
+            "voxa": { "updates_default_applied": true }
+        });
+        apply_settings_migrations(&mut settings, &raw);
+        assert!(!settings.update_checks_enabled);
     }
 
     #[test]

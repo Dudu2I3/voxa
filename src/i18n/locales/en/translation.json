@@ -2,6 +2,7 @@
   "tray": {
     "settings": "Settings...",
     "checkUpdates": "Check for Updates...",
+    "updateAvailable": "Update to v{{version}}…",
     "copyLastTranscript": "Copy Last Transcript",
     "unloadModel": "Unload Model",
     "model": "Model",
@@ -28,7 +29,7 @@
     "customModelDescription": "Not officially supported",
     "migration": {
       "title": "Your models need an update",
-      "description": "Handy now uses a newer kind of model. Download the new version to keep transcribing. Old versions will be removed.",
+      "description": "Voxa now uses a newer kind of model. Download the new version to keep transcribing. Old versions will be removed.",
       "replaces": "Replaces {{name}}",
       "oldFormat": "Old format",
       "failed": "Download failed",
@@ -69,7 +70,7 @@
     },
     "permissions": {
       "title": "Permissions Required",
-      "description": "Handy needs a couple of permissions to work properly.",
+      "description": "Voxa needs a couple of permissions to work properly.",
       "microphone": {
         "title": "Microphone Access",
         "description": "Required to hear your voice for transcription."
@@ -126,7 +127,7 @@
     "general": {
       "title": "General",
       "shortcut": {
-        "title": "Handy Shortcuts",
+        "title": "Voxa Shortcuts",
         "description": "Configure keyboard shortcuts to trigger speech-to-text recording",
         "loading": "Loading shortcuts...",
         "none": "No shortcuts configured",
@@ -184,7 +185,7 @@
       "deleteActiveConfirm": "{{modelName}} is your active model. Deleting it will stop transcriptions until you select a new model. Are you sure?",
       "deleteTitle": "Delete Model",
       "retiredNotice": {
-        "title": "Old models no longer work with Handy",
+        "title": "Old models no longer work with Voxa",
         "description": "They're taking up {{size}} on your computer.",
         "delete": "Delete models",
         "deleted": "Deleted old models",
@@ -197,7 +198,7 @@
       },
       "rescan": {
         "label": "Rescan",
-        "tooltip": "Rescan for models added to the models folder or Hugging Face cache outside Handy"
+        "tooltip": "Rescan for models added to the models folder or Hugging Face cache outside Voxa"
       },
       "noModelsMatch": "No models match this filter."
     },
@@ -261,11 +262,11 @@
       },
       "autostart": {
         "label": "Launch on Startup",
-        "description": "Automatically start Handy when you log in to your computer."
+        "description": "Automatically start Voxa when you log in to your computer."
       },
       "showTrayIcon": {
         "label": "Show Tray Icon",
-        "description": "Display the Handy icon in the system tray."
+        "description": "Display the Voxa icon in the system tray."
       },
       "overlay": {
         "style": {
@@ -483,8 +484,8 @@
       },
       "updateChecks": {
         "label": "Check for Updates",
-        "description": "Automatically check for new versions of Handy",
-        "lockedDescription": "Disabled by system configuration (HANDY_DISABLE_UPDATER)"
+        "description": "Automatically check for new versions of Voxa",
+        "lockedDescription": "Voxa does not update itself and makes no update requests"
       },
       "whatsNewPreview": {
         "title": "Preview What's New",
@@ -575,7 +576,7 @@
       },
       "keyboardDiagnostic": {
         "title": "Keyboard Diagnostic",
-        "description": "Checks whether keyboard events reach Handy. Only event counts are recorded — never which keys you press.",
+        "description": "Checks whether keyboard events reach Voxa. Only event counts are recorded — never which keys you press.",
         "run": "Run 10s diagnostic",
         "running": "Listening… press your shortcut a few times (e.g. Option+Space)",
         "secureInputLabel": "Secure Input",
@@ -589,7 +590,7 @@
         "mouse": "Mouse",
         "verdictBlocked": "Secure Input is blocking key events — keyed shortcuts cannot work until it is resolved.",
         "verdictSuspicious": "Modifier events arrived but no key events — something is suppressing keys even though Secure Input reports disabled. Please report this on GitHub.",
-        "verdictOk": "Key events are reaching Handy normally.",
+        "verdictOk": "Key events are reaching Voxa normally.",
         "verdictNoEvents": "No events captured — did you press any keys during the test?",
         "failed": "Diagnostic failed: {{error}}"
       }
@@ -598,15 +599,15 @@
       "title": "About",
       "version": {
         "title": "Version",
-        "description": "Current version of Handy"
+        "description": "Current version of Voxa"
       },
       "whatsNewUpdates": {
         "label": "Show What's New",
-        "description": "Show release notes after Handy updates"
+        "description": "Show release notes after Voxa updates"
       },
       "appDataDirectory": {
         "title": "App Data Directory",
-        "description": "Location where Handy stores its data"
+        "description": "Location where Voxa stores its data"
       },
       "sourceCode": {
         "title": "Source Code",
@@ -614,16 +615,16 @@
         "button": "View on GitHub"
       },
       "supportDevelopment": {
-        "title": "Support Development",
-        "description": "Help us continue building Handy",
-        "button": "Donate"
+        "title": "Based on Handy",
+        "description": "Voxa is a fork of Handy by CJ Pais (MIT license)",
+        "button": "View Handy"
       },
       "acknowledgments": {
         "title": "Acknowledgments",
         "ggml": {
           "title": "ggml",
           "description": "High-performance tensor library for on-device machine learning inference",
-          "details": "Handy's local speech-to-text is built on transcribe.cpp and ggml. Thanks to the amazing work by Georgi Gerganov and contributors."
+          "details": "Voxa's local speech-to-text is built on transcribe.cpp and ggml. Thanks to the amazing work by Georgi Gerganov and contributors."
         }
       }
     }
@@ -644,7 +645,7 @@
     "portableUpdateBrowseButton": "Open GitHub Releases"
   },
   "whatsNew": {
-    "title": "New in Handy v{{version}}"
+    "title": "New in Voxa v{{version}}"
   },
   "common": {
     "loading": "Loading...",
@@ -657,7 +658,7 @@
     "noOptionsFound": "No options found"
   },
   "accessibility": {
-    "permissionsDescription": "Handy needs accessibility permissions to type transcribed text.",
+    "permissionsDescription": "Voxa needs accessibility permissions to type transcribed text.",
     "openSettings": "Open System Settings"
   },
   "errors": {
@@ -680,11 +681,11 @@
   },
   "appLanguage": {
     "title": "Application Language",
-    "description": "Change the language of the Handy interface"
+    "description": "Change the language of the Voxa interface"
   },
   "theme": {
     "title": "Application Theme",
-    "description": "Choose whether Handy follows your system theme or stays light or dark",
+    "description": "Choose whether Voxa follows your system theme or stays light or dark",
     "options": {
       "system": "System",
       "light": "Light",
@@ -706,5 +707,249 @@
     "learnMore": "How to fix",
     "recorderBlocked": "Can't record shortcuts right now — macOS Secure Input is blocking key events. Resolve the Secure Input warning first.",
     "dismiss": "Dismiss"
+  },
+  "voxa": {
+    "nav": {
+      "statistics": "Statistics"
+    },
+    "stats": {
+      "title": "Statistics",
+      "subtitle": "Measured on this Mac. Nothing leaves it.",
+      "loading": "Loading…",
+      "error": "Could not load statistics: {{error}}",
+      "retry": "Try again",
+      "empty": {
+        "title": "No dictations yet",
+        "body": "Dictate something with your shortcut and the numbers will show up here."
+      },
+      "cards": {
+        "today": "Today",
+        "week": "This week",
+        "allTime": "All time",
+        "wordsLabel": "Words",
+        "dictations": "Dictations: {{value}}",
+        "minutes": "Spoken: {{value}} {{unit}}",
+        "avgWords": "Words per dictation",
+        "avgSeconds": "Seconds per dictation",
+        "latinShare": "Latin share",
+        "latinHint": "Words with at least one letter A–Z, such as RAG-пайплайн"
+      },
+      "units": {
+        "min": "min",
+        "hour": "h",
+        "sec": "s",
+        "ms": "ms",
+        "words": {
+          "one": "word",
+          "few": "words",
+          "many": "words",
+          "other": "words"
+        }
+      },
+      "chart": {
+        "title": "Words per day",
+        "range": "Last 30 days",
+        "peak": "Peak: {{value}}",
+        "bar": "{{date}}: words {{words}}, dictations {{dictations}}",
+        "today": "today"
+      },
+      "models": {
+        "title": "Models",
+        "columns": {
+          "model": "Model",
+          "dictations": "Dictations",
+          "words": "Words",
+          "latency": "Latency avg / p95",
+          "latin": "Latin"
+        },
+        "notEnough": "not enough data",
+        "notEnoughHint": "Needs at least {{min}} timed dictations, this model has {{count}}.",
+        "imported": "Imported history",
+        "latencyHint": "From the end of the recording to the finished text, model and post-processing included."
+      },
+      "candidates": {
+        "title": "Dictionary candidates",
+        "replaced": {
+          "title": "The model gets these wrong",
+          "hint": "Dictionary replacements that actually fired, most frequent first."
+        },
+        "translit": {
+          "title": "Written in Cyrillic",
+          "hint": "Known technical terms the model spelled with Cyrillic letters."
+        },
+        "empty": "Nothing to suggest yet.",
+        "seen": "written as: {{variants}}",
+        "times": "×{{count}}",
+        "add": "Add to dictionary",
+        "inDictionary": "In dictionary",
+        "toastAdded": "“{{term}}” added to the dictionary",
+        "toastError": "Could not add the word: {{error}}"
+      },
+      "footer": {
+        "local": "Every number is computed on this Mac from your own dictations.",
+        "clear": "Clear statistics",
+        "clearConfirm": "Delete all recorded statistics? History and audio stay.",
+        "clearTitle": "Clear statistics",
+        "cleared": "Statistics cleared"
+      },
+      "hero": {
+        "label": {
+          "one": "word today",
+          "few": "words today",
+          "many": "words today",
+          "other": "words today"
+        }
+      },
+      "refresh": "Refresh"
+    },
+    "overlay": {
+      "recording": "Recording",
+      "arming": "Starting the microphone",
+      "transcribing": "Recognizing",
+      "done": "Done",
+      "cancel": "Cancel dictation",
+      "error": {
+        "recording": "Microphone unavailable",
+        "transcription": "Could not transcribe",
+        "paste": "Could not insert text",
+        "generic": "Something went wrong"
+      }
+    },
+    "settings": {
+      "initialPrompt": {
+        "title": "Context phrase",
+        "description": "A natural sentence with your terms. Whisper reads it as context and spells those words right. Leave it empty to turn it off.",
+        "placeholder": "A sentence that uses your terms"
+      },
+      "fixCase": {
+        "title": "Fix case of dictionary words",
+        "description": "After recognition, “langchain” becomes “LangChain” when the word is in your dictionary."
+      },
+      "handyImport": {
+        "title": "Import custom words from Handy",
+        "body": "Your Handy settings have words Voxa does not know yet: {{words}}. Voxa only reads that file and never changes it.",
+        "import": "Import",
+        "dismiss": "No thanks",
+        "imported": "Custom words imported"
+      },
+      "fillers": {
+        "title": "Filler words",
+        "description": "Words the Words tab counts as fillers, separated by commas. A phrase of up to three words (like “you know”) counts as one filler.",
+        "placeholder": "um, like, you know"
+      }
+    },
+    "updates": {
+      "title": "Updates",
+      "description": "Voxa looks for a new version on start and every 6 hours. It never installs anything without your click; models, history, statistics and settings stay as they are.",
+      "idle": "Not checked yet.",
+      "checking": "Checking for updates…",
+      "upToDate": "You have the latest version.",
+      "available": "Version {{version}} is available.",
+      "downloading": "Downloading the update… {{progress}}%",
+      "installing": "Installing. Voxa will restart in a moment.",
+      "lastChecked": "Last checked {{time}}",
+      "check": "Check for updates",
+      "install": "Update",
+      "retry": "Try again",
+      "notes": "What changed in {{version}}",
+      "footerAvailable": "Version {{version}} available",
+      "auto": {
+        "title": "Check for updates automatically",
+        "description": "Looks for a new version when Voxa starts and every 6 hours, quietly in the background. You can still check by hand.",
+        "locked": "Updates are turned off by the system configuration."
+      },
+      "error": {
+        "disabled": "Updates are turned off by the system configuration.",
+        "notConfigured": "Updates are not set up yet: the release signing key is missing. See docs/SETUP_SECRETS.md.",
+        "network": "Could not reach GitHub. Check the connection and try again. The current version keeps working.",
+        "signature": "The update did not pass the signature check and was not installed. The current version keeps working.",
+        "noRelease": "No release is published yet.",
+        "other": "The update did not work out. The current version keeps working."
+      }
+    },
+    "words": {
+      "tabs": {
+        "label": "Statistics sections",
+        "overview": "Overview",
+        "words": "Words"
+      },
+      "period": {
+        "label": "Period",
+        "week": "Week",
+        "month": "Month",
+        "all": "All time",
+        "custom": "Custom",
+        "from": "From",
+        "to": "To",
+        "weekHint": "Last 7 days",
+        "monthHint": "Last 30 days"
+      },
+      "showStop": {
+        "label": "Show function words",
+        "hint": "Prepositions, conjunctions, pronouns, particles"
+      },
+      "loading": "Loading words…",
+      "error": "Could not load this block: {{error}}",
+      "retry": "Try again",
+      "empty": {
+        "title": "No words yet",
+        "body": "Dictate something and the word statistics will appear here."
+      },
+      "emptyBlock": "Nothing in this period yet.",
+      "backfill": {
+        "running": "Indexing earlier dictations… {{processed}} of {{total}}",
+        "hint": "The numbers below fill in as it goes."
+      },
+      "vocabulary": {
+        "title": "Vocabulary",
+        "unit": {
+          "one": "different word",
+          "few": "different words",
+          "many": "different words",
+          "other": "different words"
+        },
+        "of": "out of {{total}} words used"
+      },
+      "top": {
+        "title": "Top words",
+        "hint": "The most used words in the period. Click a word for details.",
+        "showAll": "Show all {{count}}",
+        "showLess": "Show fewer",
+        "times": "{{count}}×"
+      },
+      "openers": {
+        "title": "How dictations begin",
+        "hint": "The first one or two words, as a share of all dictations.",
+        "one": "First word",
+        "two": "First two words"
+      },
+      "phrases": {
+        "title": "Frequent phrases",
+        "hint": "Two- and three-word phrases used at least twice. Phrases made only of function words are left out.",
+        "two": "Two words",
+        "three": "Three words"
+      },
+      "fillers": {
+        "title": "Filler words",
+        "hint": "Counts of the words you chose. Edit the list in Settings, Advanced.",
+        "none": "No filler words are set.",
+        "trendTitle": "Fillers per 100 words, by week",
+        "trendEmpty": "Not enough data for a trend yet.",
+        "week": "Week of {{date}}: {{value}} per 100 words ({{count}} of {{words}})",
+        "peak": "Peak: {{value}}"
+      },
+      "newWords": {
+        "title": "New words",
+        "hint": "First used in this period and used at least twice in it. For all time: the last 30 days."
+      },
+      "detail": {
+        "title": "Word details",
+        "close": "Close",
+        "total": "Total in the period: {{value}}",
+        "forms": "Forms",
+        "examples": "Recent dictations",
+        "noExamples": "No dictations with this word in the period."
+      }
+    }
   }
 }

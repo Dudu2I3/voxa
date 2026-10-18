@@ -947,6 +947,217 @@ async isLaptop() : Promise<Result<boolean, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+/**
+ * Statistics for the "Statistics" screen, computed in the system timezone.
+ */
+async getVoxaStats() : Promise<Result<VoxaStats, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_voxa_stats") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Deletes all recorded statistics. History and audio are not touched.
+ */
+async voxaClearStats() : Promise<Result<number, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_clear_stats") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Adds a term to the custom words. Returns the dictionary after the call; the
+ * list is unchanged when the term was already in it.
+ */
+async voxaAddDictionaryWord(word: string) : Promise<Result<string[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_add_dictionary_word", { word }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * The "import custom words from Handy" offer, if Handy is installed, has
+ * words Voxa lacks and the owner has not answered yet.
+ */
+async voxaGetHandyImport() : Promise<HandyImportOffer | null> {
+    return await TAURI_INVOKE("voxa_get_handy_import");
+},
+/**
+ * Adds Handy's new custom words and closes the offer. Returns the dictionary.
+ */
+async voxaImportHandyWords() : Promise<Result<string[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_import_handy_words") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Closes the import offer without importing anything.
+ */
+async voxaDismissHandyImport() : Promise<void> {
+    await TAURI_INVOKE("voxa_dismiss_handy_import");
+},
+/**
+ * The sentence handed to Whisper as context. Empty switches it off.
+ */
+async voxaSetInitialPrompt(prompt: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_set_initial_prompt", { prompt }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Whether custom words the model already saw are still repaired for case.
+ */
+async voxaSetFixCustomWordCase(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_set_fix_custom_word_case", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Top words of the period. `include_stop` shows prepositions, particles and the like.
+ */
+async voxaWordsTop(period: WordsPeriod, includeStop: boolean) : Promise<Result<WordCount[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_top", { period, includeStop }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Words first used inside the period and used at least twice in it.
+ */
+async voxaWordsNew(period: WordsPeriod, includeStop: boolean) : Promise<Result<WordCount[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_new", { period, includeStop }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async voxaWordsVocabulary(period: WordsPeriod) : Promise<Result<Vocabulary, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_vocabulary", { period }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * How dictations most often begin.
+ */
+async voxaWordsOpeners(period: WordsPeriod) : Promise<Result<Openers, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_openers", { period }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Frequent two- and three-word phrases (not made of stop words only).
+ */
+async voxaWordsPhrases(period: WordsPeriod) : Promise<Result<Phrases, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_phrases", { period }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Filler word counters and their weekly trend.
+ */
+async voxaWordsFillers(period: WordsPeriod) : Promise<Result<Fillers, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_fillers", { period }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * All forms of one word in the period and its latest dictations, word highlighted.
+ */
+async voxaWordDetail(period: WordsPeriod, stem: string) : Promise<Result<WordDetail, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_word_detail", { period, stem }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Progress of the one-time indexing of older dictations.
+ */
+async voxaWordsBackfillStatus() : Promise<Result<BackfillStatus, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_words_backfill_status") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Saves the filler word list; returns it as stored (trimmed, no empty or
+ * duplicate entries, at most three words each).
+ */
+async voxaSetFillerWords(words: string[]) : Promise<Result<string[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_set_filler_words", { words }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Current update state (the UI also follows the `voxa-update-status` event).
+ */
+async voxaUpdateStatus() : Promise<Result<UpdateStatus, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_update_status") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * "Check for updates" button: reports errors and works with automatic checks off.
+ */
+async voxaCheckForUpdates() : Promise<Result<UpdateStatus, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_check_for_updates") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * "Update" button: downloads, verifies, installs and restarts. Returns only on
+ * failure.
+ */
+async voxaInstallUpdate() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("voxa_install_update") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -1042,11 +1253,30 @@ long_form_chunking?: boolean;
  * not gated on this — that follows model capability. Migrated from the old
  * `overlay_position` (position `none` → style `None`).
  */
-overlay_style?: OverlayStyle }
+overlay_style?: OverlayStyle; 
+/**
+ * Voxa-only settings (see `crate::voxa`).
+ */
+voxa?: VoxaSettings }
 export type AudioDevice = { index: string; name: string; is_default: boolean }
 export type AutoSubmitKey = "enter" | "ctrl_enter" | "cmd_enter"
 export type AvailableAccelerators = { transcribe: string[]; gpu_devices: GpuDeviceOption[] }
+export type BackfillState = 
+/**
+ * Nothing to index (or not started).
+ */
+"idle" | "running" | "done"
+export type BackfillStatus = { state: BackfillState; processed: number; total: number }
 export type BindingResponse = { success: boolean; binding: ShortcutBinding | null; error: string | null }
+export type CandidateKind = 
+/**
+ * A custom-word replacement that fired: the model got the word wrong.
+ */
+"replacement" | 
+/**
+ * The model wrote a known technical term in Cyrillic.
+ */
+"translit"
 /**
  * Script applied to Mandarin and Cantonese output. Other languages are never
  * converted.
@@ -1058,7 +1288,49 @@ export type ChineseScript =
 "as_transcribed" | "simplified" | "traditional"
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
+export type DailyWords = { 
+/**
+ * Local calendar day, `YYYY-MM-DD`.
+ */
+date: string; words: number; dictations: number }
+export type DictionaryCandidate = { kind: CandidateKind; 
+/**
+ * The spelling to add to the dictionary.
+ */
+term: string; count: number; 
+/**
+ * How the model wrote it instead, most frequent first.
+ */
+variants: string[]; in_dictionary: boolean }
+/**
+ * A piece of an example sentence; `hit` pieces are the word to highlight.
+ */
+export type ExampleSegment = { text: string; hit: boolean }
+export type FillerStat = { word: string; 
+/**
+ * Uses within the period.
+ */
+count: number; 
+/**
+ * Uses per week of the trend, aligned with `Fillers::weeks`.
+ */
+weekly: number[] }
+export type Fillers = { items: FillerStat[]; weeks: WeekPoint[] }
+export type FormCount = { form: string; count: number }
 export type GpuDeviceOption = { id: string; name: string; total_vram_mb: number }
+export type HandyImportOffer = { 
+/**
+ * Where the words were read from.
+ */
+path: string; 
+/**
+ * Every custom word in Handy.
+ */
+words: string[]; 
+/**
+ * The ones Voxa does not have yet; the import adds exactly these.
+ */
+new_words: string[] }
 export type HistoryEntry = { id: number; file_name: string; timestamp: number; saved: boolean; title: string; transcription_text: string; post_processed_text: string | null; post_process_prompt: string | null; post_process_requested: boolean }
 export type HistoryUpdatePayload = { action: "added"; entry: HistoryEntry } | { action: "updated"; entry: HistoryEntry } | { action: "deleted"; id: number } | { action: "toggled"; id: number }
 /**
@@ -1103,7 +1375,34 @@ sha256: string | null } } |
  * in a shared cache. Nothing to download.
  */
 "Local"
+export type ModelStats = { 
+/**
+ * Registry id of the model; empty for imported history without one.
+ */
+model_id: string; dictations: number; words: number; 
+/**
+ * Share of Latin words, `None` without words.
+ */
+latin_share: number | null; 
+/**
+ * Dictations with a measured latency.
+ */
+latency_samples: number; avg_latency_ms: number | null; p95_latency_ms: number | null; 
+/**
+ * `latency_samples >= MIN_LATENCY_SAMPLES`; below it the UI says "not enough data".
+ */
+enough_latency_data: boolean }
 export type ModelUnloadTimeout = "never" | "immediately" | "min_2" | "min_5" | "min_10" | "min_15" | "hour_1" | "sec_15"
+export type OpenerStat = { text: string; count: number; 
+/**
+ * Share of the period's dictations, in percent.
+ */
+percent: number }
+export type Openers = { 
+/**
+ * Dictations with at least one word in the period.
+ */
+total: number; one: OpenerStat[]; two: OpenerStat[] }
 export type OverlayPosition = "top" | "bottom"
 /**
  * Which recording overlay to display. `Minimal` and `Live` share one base
@@ -1114,7 +1413,14 @@ export type OverlayPosition = "top" | "bottom"
 export type OverlayStyle = "none" | "minimal" | "live"
 export type PaginatedHistory = { entries: HistoryEntry[]; has_more: boolean }
 export type PasteMethod = "ctrl_v" | "direct" | "none" | "shift_insert" | "ctrl_shift_v" | "external_script"
+export type PeriodStats = { dictations: number; words: number; 
+/**
+ * Minutes of recorded audio (rows without a known length add nothing).
+ */
+minutes: number }
 export type PermissionAccess = "allowed" | "denied" | "unknown"
+export type PhraseStat = { text: string; count: number }
+export type Phrases = { bigrams: PhraseStat[]; trigrams: PhraseStat[] }
 /**
  * Request format a post-processing endpoint speaks. Built-in providers have a
  * fixed format; only the custom provider lets the user change it.
@@ -1226,8 +1532,129 @@ export type StreamWorkKind = "transcribing" | "polishing"
 export type Theme = "system" | "light" | "dark"
 export type TranscribeAcceleratorSetting = "auto" | "cpu" | "gpu"
 export type TypingTool = "auto" | "wtype" | "kwtype" | "dotool" | "ydotool" | "xdotool"
+export type UpdateErrorKind = 
+/**
+ * Switched off by `HANDY_DISABLE_UPDATER`.
+ */
+"disabled" | 
+/**
+ * The release signing key is not set up yet.
+ */
+"not_configured" | "network" | 
+/**
+ * The archive does not match the signature, or the key is invalid.
+ */
+"signature" | 
+/**
+ * The feed answered but has no release.
+ */
+"no_release" | "other"
+export type UpdatePhase = 
+/**
+ * Nothing checked yet.
+ */
+"idle" | "checking" | "up_to_date" | "available" | "downloading" | "installing" | "error"
+/**
+ * Everything the UI shows about updates.
+ */
+export type UpdateStatus = { phase: UpdatePhase; current_version: string; 
+/**
+ * The announced version while `phase` is `Available`, `Downloading`,
+ * `Installing`, or `Error` after a failed install.
+ */
+version: string | null; 
+/**
+ * Release notes (the commit list the release workflow wrote).
+ */
+notes: string | null; 
+/**
+ * Publication date, RFC 3339.
+ */
+published: string | null; 
+/**
+ * Download progress in percent, while `Downloading`.
+ */
+progress: number | null; error_kind: UpdateErrorKind | null; 
+/**
+ * Technical detail of the error, for the log line under the message.
+ */
+error_detail: string | null; 
+/**
+ * When the last finished check ended, RFC 3339.
+ */
+last_checked: string | null }
 export type VadBackend = "silero" | "earshot"
+export type Vocabulary = { 
+/**
+ * Different words (stems) used in the period.
+ */
+distinct: number; 
+/**
+ * Word occurrences in the period (numbers are not words).
+ */
+total: number }
+/**
+ * Voxa-only settings, nested under `AppSettings.voxa`.
+ */
+export type VoxaSettings = { 
+/**
+ * A natural sentence with your terms, passed to Whisper as context so it
+ * spells them right. Empty switches it off.
+ */
+initial_prompt: string; 
+/**
+ * Repair the case of custom words the model already saw as a glossary
+ * (`langchain` -> `LangChain`).
+ */
+fix_custom_word_case: boolean; 
+/**
+ * The owner answered the "import custom words from Handy" offer.
+ */
+handy_import_handled: boolean; 
+/**
+ * The one-time switch of `update_checks_enabled` to on has been applied
+ * (see `settings::apply_settings_migrations`).
+ */
+updates_default_applied: boolean; 
+/**
+ * Filler words counted on the Words tab. A multi-word filler ("как бы")
+ * is looked up as a phrase of up to three words.
+ */
+filler_words: string[] }
+export type VoxaStats = { today: PeriodStats; 
+/**
+ * Monday to Sunday of the current week.
+ */
+week: PeriodStats; all_time: PeriodStats; avg_words_per_dictation: number; avg_seconds_per_dictation: number | null; latin_share: number | null; daily: DailyWords[]; models: ModelStats[]; candidates: DictionaryCandidate[] }
+export type WeekPoint = { 
+/**
+ * Monday of the week, `YYYY-MM-DD`.
+ */
+week_start: string; 
+/**
+ * All filler uses in the week.
+ */
+fillers: number; 
+/**
+ * All words in the week, to turn the line into "per 100 words".
+ */
+words: number }
 export type WindowsMicrophonePermissionStatus = { supported: boolean; overall_access: PermissionAccess; device_access: PermissionAccess; app_access: PermissionAccess; desktop_app_access: PermissionAccess }
+export type WordCount = { 
+/**
+ * Aggregation key (the stem); pass it back to ask for the word's details.
+ */
+stem: string; 
+/**
+ * The most frequent real form of the word in the period ("промпт", not "промп").
+ */
+word: string; count: number }
+export type WordDetail = { word: string; total: number; forms: FormCount[]; examples: WordExample[] }
+export type WordExample = { dictation_id: number; created_at: number; segments: ExampleSegment[] }
+/**
+ * Local calendar days (`YYYY-MM-DD`), both ends inclusive; `None` is open.
+ */
+export type WordsPeriod = { from: string | null; to: string | null }
 
 /** tauri-specta globals **/
 

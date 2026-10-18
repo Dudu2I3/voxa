@@ -26,6 +26,7 @@ mod transcription_coordinator;
 mod tray;
 mod tray_i18n;
 mod utils;
+mod voxa;
 
 pub use cli::CliArgs;
 #[cfg(debug_assertions)]
@@ -213,6 +214,9 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     app_handle.manage(transcription_manager.clone());
     app_handle.manage(history_manager.clone());
     app_handle.manage(tray::TrayState::new());
+    // Voxa: dictation statistics (own database, see voxa/store.rs)
+    voxa::init(app_handle);
+    voxa::updates::init(app_handle);
 
     // Note: Shortcuts are NOT initialized here.
     // The frontend is responsible for calling the `initialize_shortcuts` command
@@ -288,10 +292,21 @@ fn initialize_core_logic(app_handle: &AppHandle) {
                 show_main_window(app);
             }
             "check_updates" => {
-                let settings = settings::get_settings(app);
-                if settings::update_checks_effectively_enabled(&settings) {
+                if !settings::update_checks_forced_disabled() {
                     show_main_window(app);
-                    let _ = app.emit("check-for-updates", ());
+                    // Open the page with the update card; look for an update when
+                    // none is announced yet.
+                    let _ = app.emit(voxa::updates::OPEN_EVENT, ());
+                    if app
+                        .state::<voxa::updates::UpdateManager>()
+                        .available_version()
+                        .is_none()
+                    {
+                        let app = app.clone();
+                        tauri::async_runtime::spawn(async move {
+                            voxa::updates::check(&app, true).await;
+                        });
+                    }
                 }
             }
             "copy_last_transcript" => {
@@ -768,6 +783,26 @@ pub fn run(cli_args: CliArgs) {
             commands::history::update_history_limit,
             commands::history::update_recording_retention_period,
             helpers::clamshell::is_laptop,
+            voxa::commands::get_voxa_stats,
+            voxa::commands::voxa_clear_stats,
+            voxa::commands::voxa_add_dictionary_word,
+            voxa::commands::voxa_get_handy_import,
+            voxa::commands::voxa_import_handy_words,
+            voxa::commands::voxa_dismiss_handy_import,
+            voxa::commands::voxa_set_initial_prompt,
+            voxa::commands::voxa_set_fix_custom_word_case,
+            voxa::commands::voxa_words_top,
+            voxa::commands::voxa_words_new,
+            voxa::commands::voxa_words_vocabulary,
+            voxa::commands::voxa_words_openers,
+            voxa::commands::voxa_words_phrases,
+            voxa::commands::voxa_words_fillers,
+            voxa::commands::voxa_word_detail,
+            voxa::commands::voxa_words_backfill_status,
+            voxa::commands::voxa_set_filler_words,
+            voxa::commands::voxa_update_status,
+            voxa::commands::voxa_check_for_updates,
+            voxa::commands::voxa_install_update,
         ])
         .events(collect_events![
             managers::history::HistoryUpdatePayload,
@@ -944,7 +979,7 @@ pub fn run(cli_args: CliArgs) {
             // for portable mode (redirects WebView2 cache to portable Data dir)
             let mut win_builder =
                 tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("/".into()))
-                    .title("Handy")
+                    .title("Voxa")
                     .inner_size(680.0, 570.0)
                     .min_inner_size(680.0, 570.0)
                     .resizable(true)
