@@ -66,7 +66,7 @@
   "onboarding_completed": true,
   "overlay_position": "bottom",
   "overlay_style": "live",
-  "paste_delay_after_ms": 60,
+  "paste_delay_after_ms": 200,
   "paste_delay_ms": 60,
   "paste_method": "direct",
   "post_process_api_keys": {

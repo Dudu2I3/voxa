@@ -775,7 +775,12 @@ pub fn paste(text: String, app_handle: AppHandle) -> Result<(), String> {
     let settings = get_settings(&app_handle);
     let paste_method = settings.paste_method;
     let paste_delay_ms = settings.paste_delay_ms;
-    let paste_delay_after_ms = settings.paste_delay_after_ms;
+    // The previous clipboard is restored this long after the paste keystroke. If the
+    // target app reads the clipboard later than that (busy app, slow machine), it pastes
+    // the old clipboard contents instead of the transcript. Existing installs have the
+    // old 60ms default persisted, so enforce a floor rather than rely on the default.
+    const MIN_PASTE_DELAY_AFTER_MS: u64 = 150;
+    let paste_delay_after_ms = settings.paste_delay_after_ms.max(MIN_PASTE_DELAY_AFTER_MS);
 
     // Append trailing space if setting is enabled
     let text = if settings.append_trailing_space {

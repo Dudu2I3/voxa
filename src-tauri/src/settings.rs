@@ -635,7 +635,7 @@ fn default_paste_delay_ms() -> u64 {
 }
 
 fn default_paste_delay_after_ms() -> u64 {
-    60
+    200
 }
 
 fn default_auto_submit() -> bool {
